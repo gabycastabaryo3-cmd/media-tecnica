@@ -112,6 +112,104 @@ RETURNS TABLE (
 $$ LANGUAGE sql STABLE;
 
 -- ------------------------------------------------------------
+-- Función: crear un reporte armando la geometría desde lat/lng
+-- Uso: SELECT crear_reporte(1, 2, 'Hurto', 6.2442, -75.5812, 4);
+-- ------------------------------------------------------------
+CREATE OR REPLACE FUNCTION crear_reporte(
+    p_usuario_id        INTEGER,
+    p_tipo_incidente_id INTEGER,
+    p_descripcion       TEXT,
+    p_lat               DOUBLE PRECISION,
+    p_lng               DOUBLE PRECISION,
+    p_nivel_peligro     INTEGER
+)
+RETURNS INTEGER AS $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO reportes (
+        usuario_id, tipo_incidente_id, descripcion,
+        latitud, longitud, geom, nivel_peligro
+    )
+    VALUES (
+        p_usuario_id, p_tipo_incidente_id, p_descripcion,
+        p_lat, p_lng,
+        ST_SetSRID(ST_MakePoint(p_lng, p_lat), 4326),
+        p_nivel_peligro
+    )
+    RETURNING id INTO v_id;
+
+    RETURN v_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------
+-- Función: validar un reporte y ajustar la reputación
+-- Un voto por usuario y reporte (la restricción UNIQUE lo garantiza).
+-- ------------------------------------------------------------
+CREATE OR REPLACE FUNCTION validar_reporte(
+    p_reporte_id INTEGER,
+    p_usuario_id INTEGER,
+    p_es_util    BOOLEAN
+)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO reporte_validaciones (reporte_id, usuario_id, es_util)
+    VALUES (p_reporte_id, p_usuario_id, p_es_util)
+    ON CONFLICT (reporte_id, usuario_id)
+    DO UPDATE SET es_util = EXCLUDED.es_util,
+                  fecha_validacion = now();
+
+    -- Si la comunidad confirma que el reporte es útil, sube la reputación
+    -- del autor; si lo desmiente, la baja.
+    UPDATE usuarios u
+       SET reputacion = u.reputacion + CASE WHEN p_es_util THEN 1 ELSE -1 END
+     WHERE u.id = (SELECT usuario_id FROM reportes WHERE id = p_reporte_id);
+
+    -- Un reporte con 5 validaciones negativas se archiva automáticamente.
+    IF (SELECT count(*) FROM reporte_validaciones
+         WHERE reporte_id = p_reporte_id AND es_util = false) >= 5 THEN
+        UPDATE reportes SET estado = 'archivado' WHERE id = p_reporte_id;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------
+-- Función: guardar una ruta consultada (historial)
+-- ------------------------------------------------------------
+CREATE OR REPLACE FUNCTION guardar_ruta_consultada(
+    p_usuario_id      INTEGER,
+    p_origen_lat      DOUBLE PRECISION,
+    p_origen_lng      DOUBLE PRECISION,
+    p_destino_lat     DOUBLE PRECISION,
+    p_destino_lng     DOUBLE PRECISION,
+    p_linea_wkt       TEXT,
+    p_distancia_metros DOUBLE PRECISION,
+    p_tiempo_segundos INTEGER
+)
+RETURNS INTEGER AS $$
+DECLARE
+    v_id INTEGER;
+BEGIN
+    INSERT INTO rutas_consultadas (
+        usuario_id, origen_geom, destino_geom, geometria_ruta,
+        distancia_metros, tiempo_estimado_segundos
+    )
+    VALUES (
+        p_usuario_id,
+        ST_SetSRID(ST_MakePoint(p_origen_lng, p_origen_lat), 4326),
+        ST_SetSRID(ST_MakePoint(p_destino_lng, p_destino_lat), 4326),
+        ST_SetSRID(ST_GeomFromText(p_linea_wkt), 4326),
+        p_distancia_metros,
+        p_tiempo_segundos
+    )
+    RETURNING id INTO v_id;
+
+    RETURN v_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- ------------------------------------------------------------
 -- Datos iniciales del catálogo
 -- ------------------------------------------------------------
 INSERT INTO tipos_incidente (nombre, nivel_peligro_base, descripcion) VALUES
