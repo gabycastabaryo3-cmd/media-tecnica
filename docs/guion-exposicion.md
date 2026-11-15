@@ -21,7 +21,7 @@ Duración estimada: **6–7 minutos**.
 | 7 | Impacto social y ambiental | Ver sección 2. | 45 s |
 | 8 | Avances: bitácora y repositorio | "Vamos en la bitácora 7; de la 1 a la 6 están entregadas. El código está en GitHub con ramas por área." | 35 s |
 | 9 | Avances: frontend y tecnologías | "Así se ve el diseño: inicio con buscador por voz, mapa con zonas de riesgo, login y formularios. Cada uno programó su módulo." | 45 s |
-| 10 | Avances: base de datos y DER | "La base de datos la diseñé e implementé yo." (dilo con seguridad, es tu parte) + las 4 relaciones del DER. | 60 s |
+| 10 | Avances: base de datos y DER | "La base de datos la diseñé e implementé yo." (dilo con seguridad, es tu parte) + señala el diagrama y nombra las 4 relaciones. | 60 s |
 
 ---
 
@@ -83,7 +83,9 @@ backend; PostgreSQL + PostGIS en Supabase para los datos.
 de geometría `Point` y `LineString` en SRID 4326 para medir distancias reales, y un índice espacial
 GiST para consultas del tipo *reportes en un radio de 500 metros*."
 
-**DER:** cuatro relaciones —
+**DER:** la diapositiva 10 lo muestra como **imagen** (exportada del archivo
+`Diagrama sin título.drawio` que está en Drive; copia en `docs/DER.png` del repositorio).
+Al explicarlo, ve señalando las relaciones:
 - `usuarios` **1:N** `reportes` (cada reporte tiene un autor)
 - `tipos_incidente` **1:N** `reportes` (catálogo que normaliza las categorías)
 - `usuarios` **N:M** `reportes` vía `reporte_validaciones` (la comunidad confirma o desmiente)
