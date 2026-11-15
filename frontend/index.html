@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PINPOINT GPS — guiamos tu viaje con seguridad. Rutas que evitan las zonas de riesgo." />
+  <title>PINPOINT GPS — Guiamos tu viaje con seguridad</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===================== BARRA SUPERIOR ===================== -->
+  <header class="barra">
+    <div class="marca">
+      <span class="pin-logo" aria-hidden="true"></span>
+      <div class="marca-texto">
+        <strong>PINPOINT <span>GPS</span></strong>
+        <small>Guiamos tu viaje con seguridad</small>
+      </div>
+    </div>
+
+    <div class="barra-acciones">
+      <span id="estado-api" class="pastilla pastilla-neutra" title="Estado de la conexión con la API">Comprobando servicio…</span>
+      <button id="btn-ubicacion" class="boton boton-fantasma" type="button">Mi ubicación</button>
+      <button id="btn-sesion" class="boton boton-primario" type="button">Iniciar sesión</button>
+    </div>
+  </header>
+
+  <main class="contenedor">
+
+    <!-- ===================== PANEL LATERAL ===================== -->
+    <aside class="panel" id="panel">
+
+      <!-- Chips de alertas -->
+      <section class="bloque">
+        <h2 class="bloque-titulo">Alertas cerca de ti</h2>
+        <div class="chips" id="chips">
+          <button class="chip activo" data-filtro="todos" type="button">Todas</button>
+          <button class="chip" data-filtro="hurto" type="button">Hurto</button>
+          <button class="chip" data-filtro="vehiculo" type="button">Vehículos</button>
+          <button class="chip" data-filtro="oscuridad" type="button">Zonas oscuras</button>
+          <button class="chip" data-filtro="orden" type="button">Orden público</button>
+        </div>
+      </section>
+
+      <!-- Ruta segura -->
+      <section class="bloque tarjeta">
+        <div class="tarjeta-cabecera">
+          <h2 class="bloque-titulo">Ruta segura</h2>
+          <span class="etiqueta-verde">Prioriza seguridad</span>
+        </div>
+
+        <label class="campo">
+          <span>Origen</span>
+          <div class="campo-fila">
+            <input id="origen" type="text" placeholder="Mi ubicación" autocomplete="off" />
+            <button id="btn-origen-ubicacion" class="boton-icono" type="button" title="Usar mi ubicación">◎</button>
+          </div>
+        </label>
+
+        <button id="btn-intercambiar" class="boton-enlace" type="button">⇅ Intercambiar</button>
+
+        <label class="campo">
+          <span>Destino</span>
+          <input id="destino" type="text" placeholder="Escribe una dirección o toca el mapa" autocomplete="off" />
+        </label>
+
+        <button id="btn-ruta" class="boton boton-primario boton-ancho" type="button">
+          Calcular ruta segura
+        </button>
+
+        <p class="ayuda">
+          Toca el mapa para fijar el destino. La ruta evita las zonas reportadas por la comunidad.
+        </p>
+
+        <!-- Resultado -->
+        <div id="resultado-ruta" class="resultado oculto">
+          <div class="resultado-fila">
+            <div>
+              <span class="dato-grande" id="ruta-distancia">—</span>
+              <span class="dato-etiqueta">distancia</span>
+            </div>
+            <div>
+              <span class="dato-grande" id="ruta-tiempo">—</span>
+              <span class="dato-etiqueta">tiempo</span>
+            </div>
+            <div>
+              <span class="dato-grande" id="ruta-riesgo">—</span>
+              <span class="dato-etiqueta">nivel de riesgo</span>
+            </div>
+          </div>
+          <p id="ruta-veredicto" class="veredicto"></p>
+          <ul id="ruta-alertas" class="lista-alertas"></ul>
+        </div>
+      </section>
+
+      <!-- Reportar -->
+      <section class="bloque tarjeta">
+        <h2 class="bloque-titulo">Reportar un incidente</h2>
+
+        <form id="form-reporte" class="formulario">
+          <label class="campo">
+            <span>Tipo</span>
+            <select id="tipo-incidente" required>
+              <option value="">Cargando tipos…</option>
+            </select>
+          </label>
+
+          <label class="campo">
+            <span>Nivel de peligro: <b id="nivel-valor">3</b>/5</span>
+            <input id="nivel-peligro" type="range" min="1" max="5" step="1" value="3" />
+          </label>
+
+          <label class="campo">
+            <span>Descripción (opcional)</span>
+            <textarea id="descripcion" rows="2" placeholder="Ej.: hurto a un motociclista hace 10 minutos"></textarea>
+          </label>
+
+          <p class="ayuda" id="coordenadas-reporte">Ubicación: sin fijar (toca el mapa).</p>
+
+          <button class="boton boton-primario boton-ancho" type="submit">Enviar reporte</button>
+        </form>
+      </section>
+
+      <!-- Últimos reportes -->
+      <section class="bloque">
+        <h2 class="bloque-titulo">Últimos reportes</h2>
+        <ul id="lista-reportes" class="lista-reportes">
+          <li class="vacio">Cargando reportes…</li>
+        </ul>
+      </section>
+
+      <footer class="pie-panel">
+        <span id="modo-datos">Datos en vivo</span>
+        <a href="https://github.com/gabycastabaryo3-cmd/media-tecnica" target="_blank" rel="noopener">Repositorio</a>
+      </footer>
+    </aside>
+
+    <!-- ===================== MAPA ===================== -->
+    <section class="mapa-envoltura">
+      <div id="mapa"></div>
+
+      <!-- Leyenda -->
+      <div class="leyenda">
+        <strong>Nivel de riesgo</strong>
+        <ul>
+          <li><i class="punto n1"></i> Bajo (1)</li>
+          <li><i class="punto n2"></i> Medio (2)</li>
+          <li><i class="punto n3"></i> Alto (3)</li>
+          <li><i class="punto n4"></i> Muy alto (4)</li>
+          <li><i class="punto n5"></i> Crítico (5)</li>
+        </ul>
+      </div>
+
+      <button id="btn-auxilio" class="boton-auxilio" type="button" title="Botón de auxilio">
+        <span aria-hidden="true">!</span>
+        <em>Auxilio</em>
+      </button>
+    </section>
+  </main>
+
+  <!-- ===================== MODAL DE SESIÓN ===================== -->
+  <div id="modal" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-caja">
+      <button id="modal-cerrar" class="modal-cerrar" type="button" aria-label="Cerrar">×</button>
+      <h2 id="modal-titulo">Iniciar sesión</h2>
+      <p class="ayuda">Ingresa para reportar incidentes y guardar tu historial de rutas.</p>
+
+      <div class="tabs">
+        <button class="tab activo" data-tab="login" type="button">Entrar</button>
+        <button class="tab" data-tab="registro" type="button">Crear cuenta</button>
+      </div>
+
+      <form id="form-sesion" class="formulario">
+        <label class="campo campo-nombre oculto">
+          <span>Nombre completo</span>
+          <input id="sesion-nombre" type="text" autocomplete="name" />
+        </label>
+
+        <label class="campo">
+          <span>Correo</span>
+          <input id="sesion-correo" type="email" autocomplete="email" required />
+        </label>
+
+        <label class="campo">
+          <span>Contraseña</span>
+          <input id="sesion-password" type="password" autocomplete="current-password" required minlength="6" />
+        </label>
+
+        <p id="sesion-error" class="error oculto"></p>
+
+        <button class="boton boton-primario boton-ancho" type="submit" id="sesion-enviar">Entrar</button>
+      </form>
+
+      <p class="ayuda centro">
+        Si la API no está disponible, la app entra en
+        <b>modo demostración</b> con datos de ejemplo.
+      </p>
+    </div>
+  </div>
+
+  <!-- Avisos -->
+  <div id="avisos" class="avisos" aria-live="polite"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
