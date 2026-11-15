@@ -5,6 +5,7 @@ package-lock.json
 # Variables de entorno y credenciales
 .env
 .env.*
+!.env.example
 *.key
 
 # Sistema
