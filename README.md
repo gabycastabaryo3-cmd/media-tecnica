@@ -90,4 +90,5 @@ Entidades: `usuarios`, `tipos_incidente`, `reportes`, `reporte_validaciones`, `r
 ## Documentación
 
 - [`docs/presentacion.pptx`](docs/presentacion.pptx) — presentación (10 diapositivas, plantilla SENA).
-- [`docs/guion-exposicion.md`](docs/guion-exposicion.md) — guion de la exposición.
+- [`docs/guion-exposicion.md`](docs/guion-exposicion.md) — guion general de la exposición.
+- [`docs/guion-oscar.md`](docs/guion-oscar.md) — guion personal del expositor de backend.
