@@ -20,7 +20,7 @@ Duración estimada: **6–7 minutos**.
 | 6 | Competencias | "Dos competencias sostienen el proyecto: construir la interfaz y desarrollar la lógica de negocio con los datos." | 35 s |
 | 7 | Impacto social y ambiental | Ver sección 2. | 45 s |
 | 8 | Avances: bitácora y repositorio | "Vamos en la bitácora 7; de la 1 a la 6 están entregadas. El código está en GitHub con ramas por área." | 35 s |
-| 9 | Avances: frontend y tecnologías | "Así se ve el diseño: inicio con buscador por voz, mapa con zonas de riesgo, login y formularios. Cada uno programó su módulo." | 45 s |
+| 9 | Avances: frontend y tecnologías | "Así se ve la app: mapa con zonas de riesgo, ruta segura, reportes, login y botón de auxilio." | 45 s |
 | 10 | Avances: base de datos y DER | "La base de datos la diseñé e implementé yo." (dilo con seguridad, es tu parte) + señala el diagrama y nombra las 4 relaciones. | 60 s |
 
 ---
@@ -70,9 +70,9 @@ competencia con el cuadro de tres competidores, lista. La 7 va en proceso.
 **Repositorio:** GitHub con ramas `main`, `frontend`, `backend` y `database`; Pull Requests revisados
 por la líder.
 
-**Frontend:** inicio con buscador por voz, chips de alertas, tarjeta "Ruta Segura", botón de auxilio,
-mapa con zonas de riesgo por color y geolocalización. Login con Google y Apple, y formularios de
-reporte. Cada integrante diseñó y programó su módulo.
+**Frontend:** mapa con las zonas de riesgo por color, cálculo de ruta segura con resumen de riesgo,
+formulario de reportes, login y botón de auxilio. Si el backend no está corriendo, la app entra en
+modo demostración con datos de ejemplo, así se puede mostrar sin depender del servidor.
 
 **Tecnologías:** HTML, CSS, JavaScript y Leaflet.js sobre OpenStreetMap; Node.js + Express en el
 backend; PostgreSQL + PostGIS en Supabase para los datos.
@@ -129,6 +129,7 @@ usamos APIs de terceros: el motor de ruteo (OSRM/Mapbox) y la geolocalización d
 1. **Practica una vez en voz alta con cronómetro.** Lee solo los títulos; el resto lo explicas.
 2. **Muestra capturas reales**: pantallas del frontend, tablas de Supabase y el DER. No abras el
    dashboard de Supabase en vivo (expone tu sesión).
-3. **Repositorio de GitHub**: créalo y súbelo antes de la exposición.
+3. **Repositorio de GitHub**: ya está creado y con el código de las tres capas.
+   Enlace: `github.com/gabycastabaryo3-cmd/media-tecnica`.
 4. **Reparte las diapositivas** entre los cinco y define quién contesta qué. Tú contestas backend,
    base de datos y API.
