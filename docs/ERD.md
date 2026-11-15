@@ -1,5 +1,9 @@
 # Diagrama entidad-relación — PINPOINT GPS
 
+![Diagrama entidad-relación](DER.png)
+
+> Diagrama original en [`DER.drawio`](DER.drawio) (se abre con [draw.io](https://app.diagrams.net/)).
+
 ```mermaid
 erDiagram
     usuarios ||--o{ reportes : "emite"

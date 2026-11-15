@@ -61,10 +61,17 @@ líder del proyecto.
 ## Base de datos
 
 - [`database/schema.sql`](database/schema.sql) — creación de las 5 tablas, índice espacial GiST y
-  función `reportes_cercanos()`.
-- [`docs/ERD.md`](docs/ERD.md) — diagrama entidad-relación.
+  funciones `reportes_cercanos()`, `crear_reporte()`, `validar_reporte()` y `guardar_ruta_consultada()`.
+- [`docs/ERD.md`](docs/ERD.md) y [`docs/DER.png`](docs/DER.png) — diagrama entidad-relación.
 
 Entidades: `usuarios`, `tipos_incidente`, `reportes`, `reporte_validaciones`, `rutas_consultadas`.
+
+## Cómo ejecutarlo
+
+1. **Base de datos:** ejecutar `database/schema.sql` en el SQL Editor de Supabase.
+2. **Backend:** `cd backend && npm install && npm run dev` (ver [`backend/README.md`](backend/README.md)).
+3. **Frontend:** `python -m http.server 8080 --directory frontend` y abrir <http://localhost:8080>
+   (ver [`frontend/README.md`](frontend/README.md)). Sin backend, la app funciona con datos de ejemplo.
 
 ---
 
