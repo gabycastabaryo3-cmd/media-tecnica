@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# Variables de entorno y credenciales
+.env
+.env.*
+*.key
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
