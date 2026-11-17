@@ -1,7 +1,8 @@
 -- ============================================================
 --  PINPOINT GPS — Esquema de base de datos
 --  Motor: PostgreSQL + PostGIS (Supabase)
---  Autor del diseño: Oscar Reyes (Backend)
+--  Diagrama (DER): Gabriela Castaño (draw.io)
+--  Implementación SQL y Supabase: Oscar Reyes (Backend)
 -- ============================================================
 
 CREATE EXTENSION IF NOT EXISTS postgis;

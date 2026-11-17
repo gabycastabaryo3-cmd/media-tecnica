@@ -36,7 +36,8 @@ Regla de oro: **no leas la diapositiva**. La diapositiva tiene 3 o 4 palabras; t
 
 ## Diapositiva 10 — Base de datos y DER (≈ 70 s) ← **tu diapositiva**
 
-> "Esta parte **la diseñé e implementé yo**, como responsable del backend.
+> "El **diagrama** lo diseñó Gabriela en draw.io, y **yo lo implementé en la base de datos**:
+> escribí el script SQL, creé las tablas y las funciones en Supabase y activé PostGIS.
 >
 > La base está en **PostgreSQL con la extensión PostGIS**, en Supabase. Son **cinco entidades**:
 > usuarios, tipos_incidente, reportes, reporte_validaciones y rutas_consultadas.
@@ -62,7 +63,7 @@ Regla de oro: **no leas la diapositiva**. La diapositiva tiene 3 o 4 palabras; t
 
 Di exactamente esto, sin adornos:
 
-1. "La base la diseñé e implementé yo."
+1. "El diagrama lo dibujó Gabriela; la base la implementé yo."
 2. "PostgreSQL + PostGIS en Supabase, cinco entidades."
 3. "Guarda geometrías Point y LineString para medir distancias reales."
 4. "Índice GiST para consultas por radio."

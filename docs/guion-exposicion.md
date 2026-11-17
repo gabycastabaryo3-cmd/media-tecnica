@@ -21,7 +21,7 @@ Duración estimada: **6–7 minutos**.
 | 7 | Impacto social y ambiental | Ver sección 2. | 45 s |
 | 8 | Avances: bitácora y repositorio | "Vamos en la bitácora 7; de la 1 a la 6 están entregadas. El código está en GitHub con ramas por área." | 35 s |
 | 9 | Avances: frontend y tecnologías | "Así se ve la app: mapa con zonas de riesgo, ruta segura, reportes, login y botón de auxilio." | 45 s |
-| 10 | Avances: base de datos y DER | "La base de datos la diseñé e implementé yo." (dilo con seguridad, es tu parte) + señala el diagrama y nombra las 4 relaciones. | 60 s |
+| 10 | Avances: base de datos y DER | "El diagrama lo diseñó Gabriela en draw.io y yo lo implementé en la base." (dilo con seguridad, es tu parte) + señala el diagrama y nombra las 4 relaciones. | 60 s |
 
 ---
 
@@ -78,7 +78,8 @@ modo demostración con datos de ejemplo, así se puede mostrar sin depender del 
 backend; PostgreSQL + PostGIS en Supabase para los datos.
 
 **Base de datos (tu parte, dilo con seguridad):**
-"La diseñé e implementé yo. PostgreSQL con PostGIS en Supabase: cinco entidades
+"El diagrama lo diseñó Gabriela en draw.io, y yo lo implementé: pasé ese diseño a SQL y creé las
+tablas, funciones e índices en Supabase. PostgreSQL con PostGIS: cinco entidades
 (`usuarios`, `tipos_incidente`, `reportes`, `reporte_validaciones`, `rutas_consultadas`), con columnas
 de geometría `Point` y `LineString` en SRID 4326 para medir distancias reales, y un índice espacial
 GiST para consultas del tipo *reportes en un radio de 500 metros*."
